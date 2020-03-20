@@ -6,4 +6,4 @@ The project is to build a mechince learning model on sever log data to discern t
   The "cpu_avg.log" contains cpu uptime usage% in 1, 5 and 15 minites.
  
  Example:
- ./collect.sh 3 60 wlp3s0   #every 3s for 60s,from wlp3s0 network device
+         ./collect.sh 3 60 wlp3s0
