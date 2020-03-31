@@ -1,5 +1,6 @@
-# PowerAttack-ML
-The project is to build a mechince learning model on sever log data to discern the power attack and develop a detection moudule.
+文件说明
+Server 服务器日志采集程序
+Client 客户端监控程序
+Client/ML_Module 机器学习模块
 
-The First step is finish which is to collect log data from server and process them.
-The Machine Learning Module is the next step I will finish.
+其他说明有待完善
