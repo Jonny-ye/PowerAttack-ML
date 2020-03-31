@@ -2,7 +2,7 @@
 path=`pwd`
 
 printf "Step 1: Collecting data from Sever.\n"
-$path/collect_log.sh 3 600 wlp3s0 
+# $path/collect_log.sh 3 1200 wlp3s0 
 
 printf "Step 2: Processing training data.\n"
 python $path/process_data.py
