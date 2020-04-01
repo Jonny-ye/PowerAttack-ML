@@ -15,7 +15,7 @@ step_t=3
 
 
 #清空日志文件并写入数据项名称
-printf "l1,l5,l15,tasks,cpu_idle,mem,disk_i,disk_o,net_dn,net_up\n">$path/base.log   
+# printf "l1,l5,l15,tasks,cpu_idle,mem,disk_i,disk_o,net_dn,net_up\n">$path/base.log   
 
 #计算采集总量
 let total=$1/$step_t

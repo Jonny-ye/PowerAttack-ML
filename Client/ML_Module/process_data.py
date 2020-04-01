@@ -38,8 +38,8 @@ def cal_data(group_n):
             do_avg += d[j][7]
             if ni_avg < d[j][8]-d[j-1][8]:
                 ni_avg = d[j][8]-d[j-1][8]
-            if ni_avg < d[j][9]-d[j-1][9]:
-                ni_avg = d[j][9]-d[j-1][9]
+            if no_avg < d[j][9]-d[j-1][9]:
+                no_avg = d[j][9]-d[j-1][9]
         c_avg /= group_n
         c_avg = 100 - c_avg
         tmp_cmax = cmax

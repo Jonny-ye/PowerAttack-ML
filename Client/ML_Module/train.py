@@ -14,40 +14,41 @@ def sigmoid_derivative(x):
 
 # 计算时间
 def show_time_used(st, et):
-    print("BP神经网络训练用时：" + str((et - st).seconds) + 's')
+    print("训练完成，用时：" + str((et - st).seconds) + 's')
 
 # BP神经网络类
 class BP_NeuralNetwork:
-    def __init__(self):
-        self.inputs = []  # 输入
+    # 构建神经网络(网络每层数目，迭代次数，学习率)
+    def __init__(self, layer_sizes, _limit, learn_rate):
+        self.inputs = []   # 输入
         self.outputs = []  # 输出
-        self.trian_num = 0   # 训练样本数
-        self.input_num = 0   # 样本数
-        self.layers = []  # 隐藏层
-        self.layer_sizes = []  # 每层隐藏层个数
-        self.layer_num = 0  # 神经网络层数
+        self.layers = []   # 隐藏层
         self.weights = []  # 权重
-        self.bias = []  # 偏置
-        self.learn_rate = 0  # 学习率
-        self.limit = 0  # 迭代次数
-        self.accuracy = 0.001  # 学习精度
+        self.bias = []     # 偏置
+        self.layer_sizes = layer_sizes  # 每层隐藏层个数
+        
+        self.train_num = 0   # 训练集样本数
+        self.input_num = 0   # 样本总数
+        self.layer_num = len(layer_sizes) - 1  # 神经网络层数（不计输入层）
+        self.learn_rate = learn_rate   # 学习率
+        self._limit = _limit           # 迭代次数
+        self._train = 0.8              # 80%样本作为训练集，20%样本作为验证集
+        self._accuracy = 0.001         # 学习精度
             
-    # 加载训练数据(网络每层数目，学习率，迭代次数，学习精度，训练样本比例)
-    def init_data(self, layer_sizes, _limit, learn_rate, _accuracy，_train):
+    # 初始化训练数据
+    def init_data(self):
+        # 初始化输入输出
         self.inputs = np.loadtxt("./train_data/train_x.csv", delimiter=',')
         self.outputs = np.loadtxt("./train_data/train_y.csv", delimiter=',')
         self.input_num = len(self.inputs)
-        self.train_num = int(self.input_num*0.8)
-        self.layer_sizes = layer_sizes
-        self.layer_num = len(layer_sizes) - 1
+        print("样本总数：" + str(self.input_num))
+        self.train_num = int(self.input_num*self._train)
+        # 初始化权重和偏置
         for i in range(self.layer_num):
             self.weights.append(np.random.rand(self.layer_sizes[i], self.layer_sizes[i + 1]))
             self.bias.append(np.random.rand(1, self.layer_sizes[i + 1]))
-        self.learn_rate = learn_rate
-        self.limit = _limit
-        self.accuracy = _accuracy
-    
-    # 前向传播
+        
+    # 正向传播
     def forward_propagate(self, _input):
         self.layers = []
         self.layers.append(_input)
@@ -56,7 +57,7 @@ class BP_NeuralNetwork:
             val = sigmoid(raw_val)
             self.layers.append(val)
     
-    # 后向传播
+    # 反向传播
     def back_propagate(self, _output):
         theta = []
         theta_output = (self.layers[-1] - _output) * sigmoid_derivative(self.layers[-1])
@@ -74,37 +75,58 @@ class BP_NeuralNetwork:
 
     # 训练模型
     def train(self):
-        for i in range(self.train_num): # 使用数据部分进行训练
-            for j in range(_sizes)
+        for i in range(self._limit): 
+            # 使用部分进行训练
+            for j in range(self.train_num):
                 self.forward_propagate(self.inputs[j])
-                if self.back_propagate(self.outputs[j]).any() < self.accuracy:
+                if self.back_propagate(self.outputs[j]).any() < self._accuracy:
                     return
     
     # 验证模型
     def validate(self):
+        predict_y = []
         for i in range(self.train_num,self.input_num):
-            self.forward_propagate(self.input[i])
+            self.forward_propagate(self.inputs[i])
             predict_y.append(self.layers[self.layer_num])
         np.set_printoptions(suppress=True)
         #np.savetxt("./train_data/predict_real.txt", predict_y, fmt='%.3f')
-        
         rows = len(predict_y)
-        cols = len(predict_y[0])
+        cols = len(predict_y[0][0])
         for i in range(rows):
             for j in range(cols):
-                if predict_y[i][j] > 0.5:
-                    predict_y[i][j] = 1
+                if predict_y[i][0][j] > 0.5:
+                    predict_y[i][0][j] = 1
                 else:
-                    predict_y[i][j] = 0
-        # print(predict_y)
+                    predict_y[i][0][j] = 0
         cnt = rows
+        print("验证集测试结果:")
         for i in range(rows):
+            print(predict_y[i])
             for j in range(cols):
-                if predict_y[i][j] != self.output[i+self.train_num][j]:
+                if predict_y[i][0][j] != self.outputs[i+self.train_num][j]:
                     cnt -= 1
                     break
         print("验证集预测准确度：" + str(cnt / len(predict_y) * 100) + "%")
-
+    
+    # 测试模型(离线模式)
+    def test(self):
+        #加载数据和保存的模型
+        self.inputs = np.loadtxt("./test_data/test_x.csv", delimiter=',')
+        self.layer_sizes = np.loadtxt("./model/layer_sizes.mat")
+        self.layer_num = len(self.layer_sizes) - 1
+        for i in range(self.layer_num):
+            file_weights = "./model/weights" + str(i) + ".mat"
+            self.weights.append(np.loadtxt(file_weights))
+            file_bias = "./model/bias" + str(i) + ".mat"
+            self.bias.append(np.loadtxt(file_bias))
+        #正向传播计算
+        predict_y = []
+        for i in range(len(self.inputs)):
+            self.forward_propagate(self.input[i])
+            predict_y.append(self.layers[self.layer_num])
+        
+        print(predict_y)
+ 
     # 保存模型
     def save_model(self):
         np.savetxt("./model/layer_sizes.mat", self.layer_sizes)
@@ -117,11 +139,11 @@ class BP_NeuralNetwork:
     
 def main():
     
-    # 构建BP神经网络
-    bp = BP_NeuralNetwork()
+    ## 构建BP神经网络
+    bp = BP_NeuralNetwork([16,12,6,2], 10000, 0.4)
     
     # 加载训练数据  (网络每层数目，迭代次数, 学习率，学习精度，训练样本比例)
-    bp.init_train([16, 8, 8, 2], int(sys.argv[1]), 0.4, 0.01, 0.8)    
+    bp.init_data()    
     
     # 训练模型
     start_time = datetime.datetime.now()
@@ -138,3 +160,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+ 
