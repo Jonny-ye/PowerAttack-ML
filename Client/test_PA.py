@@ -57,13 +57,16 @@ class BP_NeuralNetwork:
             file_bias = "./ML_Module/model/bias" + str(i) + ".mat"
             self.bias.append(np.loadtxt(file_bias))
         
+        print("本地机器学习模型分析结果：")
         self.forward_propagate(self.inputs)
         if(self.layers[self.layer_num][0]>0.5):
-            t=1
+            print("[警告] 服务器可能存在潜在的电力攻击！")
+            d = np.loadtxt("./test_data/test_tmp.csv")
+            info = "平均负载：" + str(d[0]) + "  cpu_avg:" + str(d[4]) + "%  cpu_max:" + str(d[5]) + "%  mem_avg:" + str(d[8])+ "MB\n" 
+            print(info)
         else:
-            t=0
-        print(t)
- 
+            print("[安全] 服务器暂无电力攻击风险。\n")
+        
 def main():
     
     # 构建BP神经网络

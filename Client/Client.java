@@ -11,33 +11,42 @@
     public static void main(String args[]){
         Socket client = null;
         try{
+            //设置连接的服务器
             String server = "localhost";
             int port = 5210;
             client = new Socket(server,5210);
-            System.out.println("已连接服务器，地址：" + server + "，端口：" + port + "\n");
-            Scanner scan = new Scanner(client.getInputStream());
-            scan.useDelimiter(";");
+            Scanner in = new Scanner(client.getInputStream());
+            in.useDelimiter(";");
             PrintStream out = new PrintStream(client.getOutputStream());
+            System.out.println("已连接服务器，地址：" + client.	getInetAddress() + "，端口：" + client.getPort() + "\n");
+            
+            //创建数据缓存文件
             File file = new File("./test_data/base_data.log");
-            if(!file.exists()){
-                file.createNewFile();
+            if(file.getParentFile().exists()){
+                file.getParentFile().mkdirs();
             }
-            PrintStream write = new PrintStream(new FileOutputStream(file));
-            boolean flag =true;
-            int cnt = 0;
-            while(flag){
-                out.println("need_data");
-                if(scan.hasNext()){
-                    timer(60); //倒计时60s
-                    write.println(scan.next());
-                    System.out.println("\n接收到第" + (++cnt) + "组数据...");
-                    analyzeData();
-                }
-                if(cnt>=10){
-                    out.println("exit");
+            PrintStream writefile = new PrintStream(new FileOutputStream(file));
+            
+            //读取服务器日志行数
+            int lines = 10;
+            //进行10次链接
+            int cnt = 5;
+            while(cnt > 0){
+                timer(3*lines);          //定时器
+                out.println(lines);     //发送指令
+                if(in.hasNext()){
+                    writefile.println(in.next());
+                    if(processData(lines)){       //处理数据
+                        analyzeData();      //分析数据
+                    }
+                }else{
                     break;
                 }
+                cnt--;
             }
+            //发送关闭连接指令
+            out.println("exit");
+            
             client.shutdownInput();
             client.shutdownOutput();
         }catch(Exception e){
@@ -45,33 +54,47 @@
         }finally{
             try {
                 client.close();
+                System.out.println("服务器断开连接");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-      }
-      public static void analyzeData() throws Exception{
-            Runtime runtime1 = Runtime.getRuntime();
-            Process p1 = runtime1.exec("./process_test_data.py");
-            p1.waitFor();
-            System.out.println("通过机器学习模型计算数据...");
-            Runtime runtime2 = Runtime.getRuntime();
-            Process p2 = runtime2.exec("./test_PA.py");
-            BufferedReader res = new BufferedReader(new InputStreamReader(p2.getInputStream()));
-            p2.waitFor();
-            String str = res.readLine();
-            if("1".equals(str)){
-                System.out.println("\n[警告] 当前服务器高负载，可能存在电力安全风险！\n");
-            }else if("0".equals(str)){
-                System.out.println("\n[安全] 服务器当前无潜在的电力攻击行为。\n");
-            }else{
-                System.out.println("返回暂无数据信息\n");
-            }
+    }
+    //处理数据
+    public static boolean processData(int lines) throws Exception{
+        String cmd = "./process_test_data.py " +String.valueOf(lines);
+        
+        Runtime runtime = Runtime.getRuntime();
+        Process process = runtime.exec(cmd);
+        if(process.waitFor()!=0){
+            System.out.println("数据处理失败");
+            return false;
         }
-        public static void timer(int s)throws Exception{
-            while((s--)> 0){
-                System.out.printf("等待服务器搜集日志信息，倒计时：%2ds\r" ,s);
-                Thread.sleep(1000);
-            }
+        return true;
+    }
+    //机器学习模型分析数据
+    public static boolean analyzeData() throws Exception{
+        String cmd = "./test_PA.py";
+        Runtime runtime = Runtime.getRuntime();
+        Process process = runtime.exec(cmd);
+        BufferedReader bufread = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        if(process.waitFor()!=0){
+            System.out.println("数据计算失败");
+            return false;
         }
+        StringBuffer buf = new StringBuffer();
+        String line;            
+        while((line = bufread.readLine())!= null){                
+            buf.append(line).append("\n");
+        }
+        System.out.println(buf.toString());
+        return true;
+    }
+    public static void timer(int s)throws Exception{
+        while((s--) > 0){
+            System.out.printf("等待服务器搜集日志信息:%2ds\r" ,s);
+            Thread.sleep(1000);
+        }
+        System.out.println("\n");
+    }
  }

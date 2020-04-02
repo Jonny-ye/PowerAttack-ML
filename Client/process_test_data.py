@@ -65,7 +65,8 @@ def normalize_data():
     np.savetxt("./test_data/test_x.csv",data,fmt='%.3f',delimiter=',')
     
 def main():
-    cal_merge_data(20)
+    
+    cal_merge_data(int(sys.argv[1]))
     normalize_data()
 if __name__=='__main__':
     main()
