@@ -57,7 +57,7 @@ class BP_NeuralNetwork:
             file_bias = "./ML_Module/model/bias" + str(i) + ".mat"
             self.bias.append(np.loadtxt(file_bias))
         
-        print("本地机器学习模型分析结果：")
+        print("本地机器学习模型计算结果：")
         self.forward_propagate(self.inputs)
         if(self.layers[self.layer_num][0]>0.5):
             print("[警告] 服务器可能存在潜在的电力攻击！")

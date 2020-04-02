@@ -4,7 +4,8 @@
 import numpy as np
 import sys
 
-def cal_merge_data(group_n):
+#处理数据
+def process_data(group_n):
     d = np.loadtxt("./test_data/base_data.log",delimiter = ',')
     e = len(d)
     s = e - group_n
@@ -52,9 +53,11 @@ def cal_merge_data(group_n):
     np.set_printoptions(suppress=True)
     np.savetxt("./test_data/test_tmp.csv",tmp,fmt='%.2f',delimiter=',')
 
+#极大值归一化
 def normalize_data():
-    data = np.loadtxt("./test_data/test_tmp.csv",delimiter=',')
-    nm = np.loadtxt("./ML_Module/train_data/maxn_data.csv",delimiter=',')
+    data = np.loadtxt("./test_data/test_tmp.csv", delimiter=',')
+    nm = np.loadtxt("./ML_Module/train_data/maxn_data.csv", delimiter=',')
+    #nm为训练数据最大值
     for i in range(len(data)):
         if nm[i] != 0:
             data[i] /= nm[i]
@@ -62,14 +65,15 @@ def normalize_data():
                 data[i] = 1.0
         else:
             data[i] = 1.0
-    np.set_printoptions(suppress=True)
-    #np.set_printoptions(precision=3)
-    np.savetxt("./test_data/test_x.csv",data,fmt='%.3f',delimiter=',')
+    np.savetxt("./test_data/test_x.csv", data,fmt='%.3f',  delimiter=',')
     
 def main():
-    
-    cal_merge_data(int(sys.argv[1]))
+    #处理数据（行数）
+    process_data(int(sys.argv[1]))
+    #标准化数据
     normalize_data()
+  
+
 if __name__=='__main__':
     main()
  
