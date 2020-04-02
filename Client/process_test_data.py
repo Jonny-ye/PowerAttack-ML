@@ -8,6 +8,8 @@ def cal_merge_data(group_n):
     d = np.loadtxt("./test_data/base_data.log",delimiter = ',')
     e = len(d)
     s = e - group_n
+    if s < 0:
+        s=0
     tms = d[s+1][3]-d[s][3]
     c_avg,cmax,cmin,cms = d[s][4],d[s][4],d[s][4],d[s+1][4]-d[s][4]
     m_avg,mmin,mmax,mms = d[s][5],d[s][5],d[s][5],d[s+1][5]-d[s][5]

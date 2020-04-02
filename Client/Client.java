@@ -22,22 +22,30 @@
             
             //创建数据缓存文件
             File file = new File("./test_data/base_data.log");
-            if(file.getParentFile().exists()){
+            if(!file.getParentFile().exists()){
                 file.getParentFile().mkdirs();
             }
             PrintStream writefile = new PrintStream(new FileOutputStream(file));
             
             //读取服务器日志行数
             int lines = 10;
-            //进行10次链接
             int cnt = 5;
             while(cnt > 0){
                 timer(3*lines);          //定时器
                 out.println(lines);     //发送指令
                 if(in.hasNext()){
+//                     System.out.println(in.next());
                     writefile.println(in.next());
                     if(processData(lines)){       //处理数据
                         analyzeData();      //分析数据
+                    }else{
+                        //数据处理失败，尝试清除缓存日志
+                        writefile.close();
+                        if(file.exists()){
+                            file.delete();
+                        }
+                        file.createNewFile();
+                        writefile = new PrintStream(new FileOutputStream(file));
                     }
                 }else{
                     break;

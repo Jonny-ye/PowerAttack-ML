@@ -15,8 +15,11 @@ class JyFile{
     public static StringBuffer reverseLines(List<String> list){
         StringBuffer buf = new StringBuffer();
         for(int i=list.size()-1; i>=0; i--){
-            buf.append((String)list.get(i));
-            buf.append("\n");
+            String str = (String)list.get(i);
+            if(!str.contains("id")){//top命令有时会错误，过滤 
+                buf.append(str);
+                buf.append("\n");
+            }
         }
         buf.append(";");
         return buf;
@@ -107,8 +110,7 @@ public class ServerCollection{
             Process p = runtime.exec("./log_service.sh &");
             System.out.println("日志服务启动...");
             ServerSocket server = new ServerSocket(5210);     //启用端口
-            System.out.println("服务器客户端启动...");
-            System.out.println("服务器地址：" + server.getInetAddress() + "，开放端口：" + server.getLocalPort() + "\n");
+            System.out.println("服务器客户端启动，开放端口：" + server.getLocalPort() + "\n");
             
             //等待客户端连接
             boolean flag=true;
