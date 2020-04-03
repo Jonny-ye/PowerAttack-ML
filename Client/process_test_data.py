@@ -6,7 +6,7 @@ import sys
 
 #处理数据
 def process_data(group_n):
-    d = np.loadtxt("./test_data/base_data.log",delimiter = ',')
+    d = np.loadtxt("./test_data/base.tmp",delimiter = ',')
     e = len(d)
     s = e - group_n
     if s < 0:

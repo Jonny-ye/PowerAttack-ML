@@ -67,7 +67,7 @@ class ClientThread implements Runnable{
                     if("exit".equalsIgnoreCase(data)){
                         break;
                     }else{
-                        String location = "./data/base.log";  //日志文件位置
+                        String location = "./data/base.tmp";  //日志文件位置
                         int row = Integer.valueOf(data);
                         if(row>=10 && row<=50){      //判断行数合法性 
                             List<String> list = JyFile.readLastNLine(new File(location), row); 

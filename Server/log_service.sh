@@ -23,7 +23,7 @@ do
     D=`free -m|awk '{print $3}'|sed -n '2p'`
     E=`cat /proc/net/dev | grep $net_tool | sed 's/:/ /g' | awk '{print $2","$10}'`
     F=`iostat|sed -n '7p'|awk '{print $3","$4}'`
-    printf "%s,%s,%s,%s,%s,%s\n" "$A" "$B" "$C" "$D" "$E" "$F" >> $path/base.log
+    printf "%s,%s,%s,%s,%s,%s\n" "$A" "$B" "$C" "$D" "$E" "$F" >> $path/base.tmp
     sleep $step_t
 done
  

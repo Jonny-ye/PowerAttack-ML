@@ -6,7 +6,7 @@ import numpy as np
 #处理数据
 def process_data(group_n):
     # 打开日志文件
-    d = np.loadtxt("./log_data/base.log",delimiter = ',',skiprows=1)
+    d = np.loadtxt("./log_data/base.tmp",delimiter = ',',skiprows=1)
     # 数据组数
     t = int(len(d)/group_n)
     

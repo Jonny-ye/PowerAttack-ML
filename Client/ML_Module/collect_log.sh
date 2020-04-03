@@ -9,14 +9,14 @@
 #网络设备名称 
 net_tool="wlp3s0"
 #日志存储路径
-path=./log_data
+path=./data
 #采集时间间隔
 step_t=3
 #***************
 
 
 #清空日志文件并写入数据项名称
-# printf "l1,l5,l15,tasks,cpu_idle,mem,disk_i,disk_o,net_dn,net_up\n">$path/base.log   
+# printf "l1,l5,l15,tasks,cpu_idle,mem,disk_i,disk_o,net_dn,net_up\n">$path/base.tmp
 
 #计算采集总量
 let total=$1/$step_t
@@ -38,7 +38,7 @@ do
     D=`free -m|awk '{print $3}'|sed -n '2p'`
     E=`cat /proc/net/dev | grep $net_tool | sed 's/:/ /g' | awk '{print $2","$10}'`
     F=`iostat|sed -n '7p'|awk '{print $3","$4}'`
-    printf "%s,%s,%s,%s,%s,%s\n" "$A" "$B" "$C" "$D" "$E" "$F" >> $path/base.log
+    printf "%s,%s,%s,%s,%s,%s\n" "$A" "$B" "$C" "$D" "$E" "$F" >> $path/base.tmp
     let i+=1
     printf "Current:%d\r" "$i"
     sleep $step_t
