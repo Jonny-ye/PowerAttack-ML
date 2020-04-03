@@ -23,7 +23,7 @@ import java.io.IOException;
             System.out.println("监控客户端启动\n已连接服务器，IP地址：" + client.	getInetAddress() + "\n");
             
             //数据缓存文件
-            File file = new File("./test_data/base_data.log");
+            File file = new File("./test_data/base.tmp");
             PrintStream writefile = new PrintStream(new FileOutputStream(file));
             
             //读取服务器日志行数
@@ -69,7 +69,7 @@ import java.io.IOException;
     
     //机器学习模型分析数据
     public static void analyzeData() throws Exception{
-        String cmd = "./test_PA.py";
+        String cmd = "./test_pa.py";
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec(cmd);
         if(process.waitFor() != 0){

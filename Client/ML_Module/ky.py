@@ -12,7 +12,7 @@ total = 0
 for i in range(rows):
     cnt = 0;
     max = 0
-    for j in range(12):
+    for j in range(14):
         if(d[i][j]>0.80):
             cnt += 1
     if (d[i][0]>0.8 or cnt>=4 or d[i][4]>0.8 or d[i][5]>0.8):

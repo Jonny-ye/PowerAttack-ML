@@ -142,7 +142,7 @@ class BP_NeuralNetwork:
 def main():
     
     ## 构建BP神经网络
-    bp = BP_NeuralNetwork([16,16,8,2], 4000, 0.1)
+    bp = BP_NeuralNetwork([16,16,8,2], 10000, 0.05)
     
     # 加载训练数据  (网络每层数目，迭代次数, 学习率，学习精度，训练样本比例)
     bp.init_data()    
