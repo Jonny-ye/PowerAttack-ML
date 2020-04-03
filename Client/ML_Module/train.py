@@ -26,7 +26,6 @@ class BP_NeuralNetwork:
         self.weights = []  # 权重
         self.bias = []     # 偏置
         self.layer_sizes = layer_sizes  # 每层隐藏层个数
-        
         self.train_num = 0   # 训练集样本数
         self.input_num = 0   # 样本总数
         self.layer_num = len(layer_sizes) - 1  # 神经网络层数（不计输入层）
@@ -41,7 +40,7 @@ class BP_NeuralNetwork:
         self.inputs = np.loadtxt("./train_data/train_x.csv", delimiter=',')
         self.outputs = np.loadtxt("./train_data/train_y.csv", delimiter=',')
         self.input_num = len(self.inputs)
-        print("样本总数：" + str(self.input_num))
+        print("样本总数：" + str(self.input_num) + "，迭代次数：" +str(self._limit) + "，学习率：" + str(self.learn_rate) )
         self.train_num = int(self.input_num*self._train)
         # 初始化权重和偏置
         for i in range(self.layer_num):
@@ -77,6 +76,8 @@ class BP_NeuralNetwork:
     def train(self):
         for i in range(self._limit): 
             # 使用部分进行训练
+            if i%1000 == 0:
+                print(i)
             for j in range(self.train_num):
                 self.forward_propagate(self.inputs[j])
                 if self.back_propagate(self.outputs[j]).any() < self._accuracy:
@@ -98,15 +99,16 @@ class BP_NeuralNetwork:
                     predict_y[i][0][j] = 1
                 else:
                     predict_y[i][0][j] = 0
-        cnt = rows
+        cnt = 0
+        cntpa = 0
         print("验证集测试结果:")
         for i in range(rows):
-            print(predict_y[i])
-            for j in range(cols):
-                if predict_y[i][0][j] != self.outputs[i+self.train_num][j]:
-                    cnt -= 1
-                    break
-        print("验证集预测准确度：" + str(cnt / len(predict_y) * 100) + "%")
+            if predict_y[i][0][0] == self.outputs[i+self.train_num][0]:
+                if predict_y[i][0][0] == 1:
+                    cntpa += 1
+                cnt += 1
+        print("验证集预测准确度：" + str(round(100.0*cnt/rows,2)) + "%")
+        print("电力攻击识别准确度：" + str(round(100.0*cntpa/cnt,2)) + "%")
     
     # 测试模型(离线模式)
     def test(self):
@@ -140,7 +142,7 @@ class BP_NeuralNetwork:
 def main():
     
     ## 构建BP神经网络
-    bp = BP_NeuralNetwork([16,12,6,2], 10000, 0.4)
+    bp = BP_NeuralNetwork([16,16,8,2], 4000, 0.1)
     
     # 加载训练数据  (网络每层数目，迭代次数, 学习率，学习精度，训练样本比例)
     bp.init_data()    

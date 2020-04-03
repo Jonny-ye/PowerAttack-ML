@@ -35,9 +35,6 @@ import java.io.IOException;
                     writefile.println(in.next());  //输出到缓存文件
                     if(processData(row)){          //预处理数据
                         analyzeData();             //分析数据
-                    }else{                         //数据预处理失败，尝试清除缓存日志
-                        if(file.exists()) {file.delete();}
-                        file.createNewFile();
                     }
                 }else{
                     break;

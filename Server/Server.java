@@ -1,3 +1,4 @@
+
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.util.List;
@@ -25,28 +26,20 @@ class JyFile{
     //读取文件最后N行
     public static List<String> readLastNLine(File file, int numRead){
         List<String> result = new ArrayList<String>();
-        if (!file.exists() || file.isDirectory() || !file.canRead()){
-            return result;
-        }
         try{
-            int count = 0;
             RandomAccessFile fileRead = new RandomAccessFile(file, "r");
-            long length = fileRead.length();
-            if (length == 0L){
-                return result;
-            }else{
-                long pos = length - 1;
-                while (pos >= 0){
-                    pos--;
-                    fileRead.seek(pos);
-                    if (fileRead.readByte() == '\n'){
-                        result.add(fileRead.readLine());
-                        if (++count == numRead){
-                            break;
-                        }
+            long pos = fileRead.length() - 1;
+            int count = 0;
+            while (pos >= 0){
+                pos--;
+                fileRead.seek(pos);
+                if (fileRead.readByte() == '\n'){
+                    result.add(fileRead.readLine());
+                    if (++count == numRead){
+                        break;
                     }
-                }//while
-            }//else
+                }
+            }
             fileRead.close();
         }catch (IOException e){
             e.printStackTrace();
@@ -74,7 +67,7 @@ class ClientThread implements Runnable{
                     if("exit".equalsIgnoreCase(data)){
                         break;
                     }else{
-                        String location = "./log_data/base_data.log";  //日志文件位置
+                        String location = "./data/base.log";  //日志文件位置
                         int row = Integer.valueOf(data);
                         if(row>=10 && row<=50){      //判断行数合法性 
                             List<String> list = JyFile.readLastNLine(new File(location), row); 
@@ -106,7 +99,7 @@ public class Server{
     public static void main(String[] args){
         try{
             Runtime runtime = Runtime.getRuntime();
-            Process process = runtime.exec("./log_service.sh &");
+            runtime.exec("./log_service.sh &");
             ServerSocket server = new ServerSocket(5973);     //启用端口
             System.out.println("服务器监控服务启动，端口：" + server.getLocalPort() + "\n");
             

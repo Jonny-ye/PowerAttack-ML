@@ -12,10 +12,6 @@ def sigmoid(x):
 def sigmoid_derivative(x):
     return x * (1 - x)
 
-# 计算时间
-def show_time_used(st, et):
-    print("训练完成，用时：" + str((et - st).seconds) + 's')
-
 # BP神经网络类
 class BP_NeuralNetwork:
     # 构建神经网络(网络每层数目，迭代次数，学习率)
@@ -60,12 +56,12 @@ class BP_NeuralNetwork:
         print("本地机器学习模型计算结果：")
         self.forward_propagate(self.inputs)
         if(self.layers[self.layer_num][0]>0.5):
-            print("[警告] 服务器可能存在潜在的电力攻击！")
+            print("[警告]服务器可能存在潜在的电力攻击！")
             d = np.loadtxt("./test_data/test_tmp.csv")
             info = "平均负载：" + str(d[0]) + "  cpu_avg:" + str(d[4]) + "%  cpu_max:" + str(d[5]) + "%  mem_avg:" + str(d[8])+ "MB\n" 
             print(info)
         else:
-            print("[安全] 服务器暂无电力攻击风险。\n")
+            print("[安全]服务器暂无电力攻击风险。\n")
         
 def main():
     
