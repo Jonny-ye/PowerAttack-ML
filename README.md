@@ -1,5 +1,5 @@
 ## 1.文件说明
->/Server: 服务器日志采集程序
+>/Server: 服务器
 >>/data：日志缓存数据
 
 >>/src  Server.jar源文件
@@ -8,7 +8,7 @@
 
 >>Server.jar  服务器后台监控程序
 
->/Client: 客户端监控程序
+>/Client: 客户端
 >>/ML_Module  日志机器学习模块（BP神经网络）
 
 >>/src    Client.jar源文件
