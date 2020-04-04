@@ -2,36 +2,22 @@
 >/Server: 服务器日志采集程序
 >>/data：日志缓存数据
 
+>>/src: Server.jar源文件
+
 >>log_service.sh  日志采集
 
->>Server.java  服务器后台监控程序
->>>Server.class
-  
->>>JyFile.class
-  
->>>ClientThread.class
-  
+>>Server.jar  服务器后台监控程序
 
 >/Client: 客户端监控程序
->>Client.java 客户端程序
->>>Client.class
+>>/ML_Module  日志机器学习模块（BP神经网络）
+
+>>/test_data  服务器的测试数据
+
+>>Client.jar 客户端程序
   
 >>process_test_data.py  测试数据预处理
-  
->>/test_data  服务器的测试数据
-  
->>/ML_Module  日志机器学习模块（BP神经网络）
->>>/data  日志数据
 
->>>/model  保存的机器学习模型 
-  
->>>/train_data  生成的机器学习数据
-
->>>collect_log.sh
-
->>>process_data.py
-
->>>train.py
+>>test_pa.py 电力攻击检测
 
 >REREAD.md
    
