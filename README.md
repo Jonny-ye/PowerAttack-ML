@@ -1,26 +1,7 @@
-## 1.文件说明
->/Server 服务器
->>/data 日志缓存数据
-
->>/src  源文件(Server.jar)
-
->>log_service.sh  日志采集
-
->>Server.jar  服务器后台监控程序
-
 >/Client: 客户端
->>/ML_Module  日志机器学习模块（BP神经网络）
 
->>/src 源文件(Client.jar)
-
->>/test_data  服务器的测试数据
-
->>Client.jar 客户端程序
-  
->>process_test_data.py  测试数据预处理
-
->>test_pa.py 电力攻击检测
+>/Server 服务器
 
 >REREAD.md
 
-说明有待完善...
+项目说明有待完善
