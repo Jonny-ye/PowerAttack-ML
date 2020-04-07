@@ -15,7 +15,7 @@ import java.io.IOException;
             
         Socket client = null;
         try{
-            //连接服务器
+            //连接服务器b1
             client = new Socket(server_ip, 5973);
             Scanner in = new Scanner(client.getInputStream());
             in.useDelimiter(";");
@@ -26,7 +26,7 @@ import java.io.IOException;
             File file = new File("./test_data/base.tmp");
             PrintStream writefile = new PrintStream(new FileOutputStream(file));
             
-            //读取服务器日志行数
+            //读取服务器日志行数b2
             int row = time_s/3;
             while( (cnt--) > 0 ){
                 timer(time_s);          //定时器倒计时
