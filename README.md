@@ -20,3 +20,5 @@
 2.对客户端的定时请求，将特定时长日志数据发送给客户端。
 
 3.采用java Socket多线程技术，支持多个客户端连接。
+
+![image](https://github.com/Jonny-ye/PowerAttack-ML/blob/master/Client-GUI1.0.png)
