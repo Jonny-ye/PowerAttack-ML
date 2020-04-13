@@ -11,9 +11,16 @@ def process_data():
     e = len(d)
     
     for i in range(s,e):
-        d[i][4] = 100 - d[i][4]
-        d[i][6] /= 1024
-        d[i][7] /= 1024
+        d[i][4] = round(100 - d[i][4],2)
+        d[i][6] = round(d[i][6]/1024,2)
+        d[i][7] = round(d[i][6]/1024,2)
+    
+    col = len(d[0])
+    f =  open("./test_data/history.tmp", 'a+')
+    for i in range(s,e):
+        for j in range(col-1):
+            f.write(str(d[i][j])+',')
+        f.write(str(d[i][col-1])+'\n')
     
     tms = d[s+1][3]-d[s][3]
     c_avg,cmax,cmin,cms = d[s][4],d[s][4],d[s][4],d[s+1][4]-d[s][4]
@@ -67,20 +74,6 @@ def normalize_data():
         else:
             data[i] = 1.0
     np.savetxt("./test_data/test_x.csv", data,fmt='%.3f',  delimiter=',')
-
-#保存历史
-def save_history():
-    d = np.loadtxt("./test_data/base.tmp",delimiter = ',')
-    row = len(d)
-    col = len(d[0])
-    localtime = time.asctime( time.localtime(time.time()) )
-    file = r'test.txt'
-    f =  open("./test_data/history.tmp", 'a+')
-    f.write(localtime+'\n')
-    for i in range(row):
-        for j in range(col-1):
-            f.write(str(d[i][j])+',')
-        f.write(str(d[i][col-1])+'\n')
     
 
 # s型函数
@@ -153,9 +146,7 @@ def main():
     process_data()
     
     normalize_data()
-    
-    save_history()
-    
+        
     # 构建BP神经网络
     bp = BP_NeuralNetwork([16,12,6,2], 5000, 0.3)
     # 离线测试
