@@ -2,6 +2,11 @@
 
 #### 开发语言：Java、Python、Bash Script
 
+Java Version: openJDK11.0.6
+
+Python Packages: datetime, numpy, sys, pandas, statsmodels, pyflux, matplotlib 
+
+
 #### 运行环境：各Linux发行版
 
 ### /Client: 客户端
