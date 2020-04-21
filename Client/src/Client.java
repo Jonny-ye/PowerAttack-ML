@@ -58,7 +58,6 @@ import java.io.IOException;
         scan.close();
         return buf.toString();
     }
-    
     public void timer(int s)throws Exception{
         while((s--) > 0){
             System.out.printf("等待服务器搜集日志信息:%2ds\r", s);
