@@ -41,7 +41,7 @@ import java.io.IOException;
     
     //机器学习模型分析数据
     public String analyzeData()throws Exception{
-        String cmd = "./src/test_pa.py";
+        String cmd = "python ./src/test_pa.py";
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec(cmd);
         if(process.waitFor() != 0){

@@ -30,7 +30,7 @@ class ClientThread implements Runnable{
                     if("exit".equalsIgnoreCase(data)){
                         break;
                     }else{
-                        String location = "./data/base.tmp";  //日志文件位置
+                        String location = "./src/data/base.tmp";  //日志文件位置
                         int line = Integer.valueOf(data)/this.time_unit;
                         if(line>=1 && line<=50){      //判断行数合法性 
                             List<String> list = this.readLastNLine(new File(location), line); 

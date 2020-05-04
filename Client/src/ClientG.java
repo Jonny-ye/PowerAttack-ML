@@ -356,16 +356,16 @@ public class ClientG{
         
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("机器学习模型计算结果");
-        model.addColumn("平均负载");
+        model.addColumn("平均功耗(W)");
         model.addColumn("CPU均值(%)");
         model.addColumn("CPU峰值(%)");
         model.addColumn("MEM均值(MB)");
         model.addColumn("NET峰值(MB/s)");
         this.table = new JTable(model);
         TableColumn firstColumn = table.getColumnModel().getColumn(0);
-        firstColumn.setPreferredWidth(140);
+        firstColumn.setPreferredWidth(125);
         TableColumn secondColumn = table.getColumnModel().getColumn(1);
-        secondColumn.setPreferredWidth(40);
+        secondColumn.setPreferredWidth(55);
         TableColumn sixthColumn = table.getColumnModel().getColumn(5);
         sixthColumn.setPreferredWidth(80);
         

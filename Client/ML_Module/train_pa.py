@@ -77,9 +77,11 @@ class BP_NeuralNetwork:
         for i in range(self._limit): 
             # 使用部分进行训练
             if i%1000 == 0:
-                print(i)
+                print("完成：",i)
             for j in range(self.train_num):
+                # 正向传播计算结果
                 self.forward_propagate(self.inputs[j])
+                # 反向传播计算偏差及权重偏置修正
                 if self.back_propagate(self.outputs[j]).any() < self._accuracy:
                     return
     
@@ -89,8 +91,11 @@ class BP_NeuralNetwork:
         for i in range(self.train_num,self.input_num):
             self.forward_propagate(self.inputs[i])
             predict_y.append(self.layers[self.layer_num])
-        np.set_printoptions(suppress=True)
+        
+        #保存原始结果
+        #np.set_printoptions(suppress=True)
         #np.savetxt("./train_data/predict_real.txt", predict_y, fmt='%.3f')
+        
         rows = len(predict_y)
         cols = len(predict_y[0][0])
         for i in range(rows):
@@ -141,10 +146,10 @@ class BP_NeuralNetwork:
     
 def main():
     
-    ## 构建BP神经网络
+    ## 构建BP神经网络(网络每层数目，迭代次数, 学习率)
     bp = BP_NeuralNetwork([16,16,8,2], 10000, 0.05)
     
-    # 加载训练数据  (网络每层数目，迭代次数, 学习率，学习精度，训练样本比例)
+    # 加载训练数据  
     bp.init_data()    
     
     # 训练模型
