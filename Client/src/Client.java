@@ -25,7 +25,7 @@ import java.io.IOException;
         System.out.println("服务器断开连接");
     }
     public void receive(int time)throws Exception{       //进行一次检测过程(检测数据行数)
-        File file = new File("./test_data/base.tmp");   //打开缓存文件
+        File file = new File("./ML_Module/test_data/base.tmp");   //打开缓存文件
         if(!file.getParentFile().exists()){
             file.getParentFile().mkdirs();
         }
@@ -41,7 +41,7 @@ import java.io.IOException;
     
     //机器学习模型分析数据
     public String analyzeData()throws Exception{
-        String cmd = "python ./src/test_pa.py";
+        String cmd = "python ./ML_Module/client_test_pa.py";
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec(cmd);
         if(process.waitFor() != 0){

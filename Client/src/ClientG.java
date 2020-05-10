@@ -359,8 +359,8 @@ public class ClientG{
         model.addColumn("平均功耗(W)");
         model.addColumn("CPU均值(%)");
         model.addColumn("CPU峰值(%)");
-        model.addColumn("MEM均值(MB)");
-        model.addColumn("NET峰值(MB/s)");
+        model.addColumn("内存均值(MB)");
+        model.addColumn("网络峰值(MB/s)");
         this.table = new JTable(model);
         TableColumn firstColumn = table.getColumnModel().getColumn(0);
         firstColumn.setPreferredWidth(125);

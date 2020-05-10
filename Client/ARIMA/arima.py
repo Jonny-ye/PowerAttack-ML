@@ -72,8 +72,8 @@ def ARIMA(series,n,name):
             }
 
 if __name__ == "__main__":
-    d1 = np.loadtxt("./test_data/history.tmp", delimiter=',', usecols=0)
-    d2 = np.loadtxt("./test_data/history.tmp", delimiter=',', usecols=4)
+    d1 = np.loadtxt("./ML_Module/test_data/history.tmp", delimiter=',', usecols=0)
+    d2 = np.loadtxt("./ML_Module/test_data/history.tmp", delimiter=',', usecols=4)
     e = len(d1)
     s = e-40
     
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     x1 = np.linspace(-3*len,0,len)
     x2 = np.linspace(0,30,10)
     
-    #负载
+    #功耗
     d1 = d1[s:e]
     res_load = ARIMA(d1,10,'load')
     pred_load = res_load['predict']['value']
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     pred_cpu = res_cpu['predict']['value']
     pred_cpu = np.round(pred_cpu,1)
    
-    print('系统负载预测值:',pred_load)
+    print('系统功耗预测值:',pred_load)
     print(res_load['p']['value'], res_load['q']['value'])
     print(res_load['unitP']['desc'])
     print(res_load['noiseP']['desc'])

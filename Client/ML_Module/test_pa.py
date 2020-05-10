@@ -24,18 +24,20 @@ def process_data():
         f.write(str(d[i][col-1])+'\n')
     
     # 处理数据
-    s_watts_avg,s_watts_max = d[s][0],d[s][0]
+    s_watts_avg,s_watts_max,s_watts_ms = d[s][0],d[s][0],d[s+1][0]-d[s][0]
     load15,load5,load1 = d[e-1][1],d[e-1][2],d[e-1][3]
     t_ms = d[s+1][4]-d[s][4]
     c_avg,c_max,c_ms = d[s][5],d[s][5],d[s+1][5]-d[s][5]
     m_avg,m_max,m_ms = d[s][6],d[s][6],d[s+1][6]-d[s][6]
     ni_ms,no_ms = d[s+1][7]-d[s][7],d[s+1][8]-d[s][8]
-    di_max,do_max = d[s][9],d[s][10]
+    disk_max = d[s][9]+d[s][10]
     
     for j in range(s+1,e):
             s_watts_avg+=d[j][0]
             if s_watts_max<d[j][0]:
-                s_max_watts=d[j][0]
+                s_watts_max=d[j][0]
+            if s_watts_ms < d[j][0]-d[j-1][0]:
+                s_watts_ms = d[j][0]-d[j-1][0]
             if t_ms < d[j][4]-d[j-1][4]:
                 t_ms = d[j][4]-d[j-1][4]
             c_avg += d[j][5]
@@ -52,28 +54,29 @@ def process_data():
                 ni_ms = d[j][7]-d[j-1][7]
             if no_ms < d[j][10]-d[j-1][10]:
                 no_ms = d[j][10]-d[j-1][10]
-            if di_max < d[j][9]:
-               di_max = d[j][9]
-            if do_max < d[j][10]:
-               do_max = d[j][10]
+            if disk_max < d[j][9]+d[j][10]:
+               disk_max = d[j][9]+d[j][10]
         
     s_watts_avg /= e
     c_avg /= e
     m_avg /= e
         
     #生成一个样本数据
-    tmp = [s_watts_avg,s_watts_max,load15,load5,load1,t_ms,c_avg,c_max,c_ms,m_avg,m_max,m_ms,ni_ms,no_ms,di_max,do_max]
+    tmp = [s_watts_avg,s_watts_max,s_watts_ms,load15,load5,load1,t_ms,c_avg,c_max,c_ms,m_avg,m_max,m_ms,ni_ms,no_ms,disk_max]
     np.set_printoptions(suppress=True)
     np.savetxt("./test_data/test_tmp.csv",tmp,fmt='%.2f',delimiter=',')
 
 #极大值归一化
 def normalize_data():
     data = np.loadtxt("./test_data/test_tmp.csv", delimiter=',')
-    max_x = np.loadtxt("./ML_Module/train_data/max_x.csv", delimiter=',')
-    
+    max_x = np.loadtxt("./train_data/max_x.csv", delimiter=',')
+    min_x = np.loadtxt("./train_data/min_x.csv", delimiter=',')
+    num = [0]*len(max_x)
+    for j in range(len(max_x)):
+        num[j] = max_x[j]-min_x[j]
     for i in range(len(data)):
-        if max_x[i] != 0:
-            data[i] /= max_x[i]
+        if num[i] != 0:
+            data[i] = (data[i]-min_x[i])/num[i]
             if(data[i]>1):
                 data[i] = 1.0
         else:
@@ -117,12 +120,12 @@ class BP_NeuralNetwork_Test:
     def test(self):
         #加载保存的模型
         self.inputs = np.loadtxt("./test_data/test_x.csv", delimiter=',')
-        self.layer_sizes = np.loadtxt("./ML_Module/model/layer_sizes.mat")
+        self.layer_sizes = np.loadtxt("./model/layer_sizes.mat")
         self.layer_num = len(self.layer_sizes) - 1
         for i in range(self.layer_num):
-            file_weights = "./ML_Module/model/weights" + str(i) + ".mat"
+            file_weights = "./model/weights" + str(i) + ".mat"
             self.weights.append(np.loadtxt(file_weights))
-            file_bias = "./ML_Module/model/bias" + str(i) + ".mat"
+            file_bias = "./model/bias" + str(i) + ".mat"
             self.bias.append(np.loadtxt(file_bias))
         
         #进行一次正向传播
@@ -139,7 +142,7 @@ class BP_NeuralNetwork_Test:
         net /= 1024
         
         #平均功耗，CPU平均占用，CPU峰值，内存平均使用，网络峰值
-        print(d[0],d[6],d[7],d[9],round(net,3)) 
+        print(d[0],d[7],d[8],d[9],round(net,3)) 
         
         
 def main():
