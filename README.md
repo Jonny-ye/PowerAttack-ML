@@ -1,13 +1,3 @@
-## 基于机器学习的数据中心电力攻击检测系统
-
-#### 开发语言：Java、Python、Bash Script
-
-Java Version: openJDK11.0.6
-
-Python Packages: datetime, numpy, sys, pandas, statsmodels, pyflux, matplotlib 
-
-#### 运行环境：各Linux发行版
-
 ### /Client: 客户端
 
 1.文件夹/ML_Module 为机器学习模块，通过在服务器模拟不同类型电力攻击的方式生成日志信息，经过数据预处理（特征工程）生成机器学习数据，训练BP神经网络，以达到最佳的潜在电力攻击的识别效果。搜集的服务器信息有：系统负载信息、系统任务数、cpu占用率、内存占用、网络设备上传下载计数、磁盘读写速度，系统总功耗
